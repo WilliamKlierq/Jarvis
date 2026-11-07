@@ -1,0 +1,24 @@
+name: macOS build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Build app and package
+        env:
+          BUNDLE_LOCAL_AI: "0"
+        run: ./packaging/build-release.sh
+      - name: Upload unsigned development package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Jarvis-1.0.0-macos-network-assisted-unsigned
+          path: dist/Jarvis-*.pkg
